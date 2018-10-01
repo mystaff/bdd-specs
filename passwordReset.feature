@@ -7,7 +7,7 @@
 
 Feature: Password Reset
 
-Scenario 1: User requests for a reset password
+Scenario 1: User requesting for password reset
 	Given user is at the forgot password page
 	When user enters valid email
 	And clicks on "Next"
