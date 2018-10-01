@@ -7,43 +7,31 @@
 
 Feature: Password Reset
 
+Scenario 1: User requests for a reset password
+	Given user is at the forgot password page
+	When user enters valid email
+	And clicks on "Next"
+	Then a reset password link is sent to the email address
 
 
-Scenario: Successful password reset
-	Given I am on "Forgot Password" page
-	  And a user exist with email: "ice+tester@staff.com", password: "password"
-	 When I enter my email as "ice+tester@staff.com"
-	  And I click on "next"
-	 Then output should say "Thank you! A password reset link has been sent to your e-mail address."
-	  And an email should be sent to "ice+tester@staff.com"
-	  And should contain link to reset password.
-	 When I click on the "reset password link"
-	 Then I should see the form to enter my new password
-     When I fill in "user_password" with "some_new_password"
-	  And I fill in "user_password_confirmation" with "some_new_password"
-	  And click next
-	 Then output should say "You've successfully reset you password"
+Scenario 2: User successfully resets password
+	Given user opens the reset password link
+	And user enters a "new password"
+	When user clicks "Next"
+	Then password is reset
 
-Scenario: Reset password using unregistered email
-	Given I am on "Forgot Password" page
-	 When I fill in "user_email" with "unknown_email"
-	  And I click on "next"
-	 Then output should say "Email address not found."
-	
-Scenario: Leaving email field empty
-	Given I am on "Forgot Password" page
-	 When I leave the "user_email" as blank
-	 Then output should say "Please enter your email."
-	  And the "button_next" should be inactive
 
-Scenario: Password reset link is expired
-	Given I have received the reset password email
-	 When user clicks the link after "30 minutes" have passed
-   	 Then user is redirected to reset password page
-	  And output should say "Your reset password token has already expired. Please click on here (link) to send a new reset password link."
+Scenario 3: User resets password using an expired link
+	Given 30 minutes have passed
+	And user opens the reset password link
+	When user enters a "new password"
+	And clicks "Next"
+	Then error should be displayed "Your reset password token has expired! Click here to reset password"
 
-Scenario: Password dont match requirements
-	Given I am on "Forgot Password" page
-	 When I fill in "user_password" with less than 6 characters such as: "q1w2"
-	 Then output should say "Please enter at least 6 characters."
+
+Scenario 4: Resetting password using non-existent email
+	Given user is at the forgot password page
+	When user enter a non-existing email
+	And clicks "Next"
+	Then error should be displayed "Email not found!"
 	
