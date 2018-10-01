@@ -9,7 +9,7 @@ Background:
 Scenario 1: Successfully adding payment method
 	When I enter all required fields
 	And submit the form
-	Then I should see a message "You successfully added your payment method"
+	Then I should see a message "You've successfully added your payment method"
 
 
 Scenario 2: Adding payment method with expired credit card
