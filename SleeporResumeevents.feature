@@ -1,10 +1,7 @@
 #
 # Feature: Sleep or Resume events
 #
-# Created with BDD Editor on: 2 August, 2019
-#
-# Please follow us at @bddeditor AND if you find this tool useful please share with friends and colleagues!
-#
+Created by Sandy on: 2 August, 2019
 
 @Silent-app 
 Feature: Sleep or Resume events
