@@ -37,4 +37,3 @@ Background:
     And Enter password on logon screen
     And Unlock screen
     Then App should start tracking time
-    And User should see the tracking time on Timeline report
