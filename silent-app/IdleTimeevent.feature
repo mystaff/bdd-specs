@@ -1,9 +1,7 @@
 #
 # Feature: Idle Time event
 #
-# Created with BDD Editor on: 6 August, 2019
-#
-# Please follow us at @bddeditor AND if you find this tool useful please share with friends and colleagues!
+# Created by Sandy Tarke on: 6 August, 2019
 #
 
 @Idle-time 
