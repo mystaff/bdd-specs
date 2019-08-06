@@ -1,7 +1,7 @@
 #
 # Feature: Sleep or Resume events
 #
-# Created by Sandy on: 2 August, 2019
+# Created by Sandy Tarke on: 2 August, 2019
 #
 
 
