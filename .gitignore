@@ -1,0 +1,7 @@
+.DS_Store
+.idea
+.idea/*
+ script/node_modules/*
+ script/node_modules
+ script/cache/
+ script/cache/*
