@@ -63,7 +63,7 @@ const installTDSilentApp = async () => {
   // todo check OS
   // if mac --->
   const { exec } = require('child_process');
-  const args = ` -s 'https://9hnz5b9yag.execute-api.us-east-1.amazonaws.com/production/bash-install-generator?hostname=2.timedoctor.com&companyId=${company.res.company.companyId}' | sudo /bin/bash`;
+  const args = ` -s 'https://9hnz5b9yag.execute-api.us-east-1.amazonaws.com/production/bash-install-generator?hostname=2.timedoctor.com&companyId=${company.res.data.companyId}' | sudo /bin/bash`;
   exec(`curl ${args}`, (error, stdout, stderr) => {
     console.log(`stdout: ${stdout}`);
     console.log(`stderr: ${stderr}`);
@@ -148,5 +148,5 @@ console.log(
 );
 
 
-installTDSilentApp();
+// installTDSilentApp();
 testTDSilentApp();

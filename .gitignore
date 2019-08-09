@@ -7,3 +7,6 @@
  script/cache/*
 node_modules/*
 node_modules
+script/cache
+script/cache/cache/*
+script/cache/*
