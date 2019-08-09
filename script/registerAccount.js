@@ -134,11 +134,9 @@ const testTDSilentApp = async () => {
   console.log('-----------after 5 min, will test all mouse movements, plz do not tocuh any thing ----------------\n');
 
   setTimeout(() => {
-    //get data from TD2
+    // get data from TD2
 
   }, 5 * 60 * 1000);
-
-
 };
 
 
@@ -150,5 +148,5 @@ console.log(
 );
 
 
-// installTDSilentApp();
+installTDSilentApp();
 testTDSilentApp();
