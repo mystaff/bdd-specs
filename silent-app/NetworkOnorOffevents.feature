@@ -1,13 +1,14 @@
 #
 # Feature: Network On or Off events
 #
-# Created with BDD Editor on: 13 August, 2019
-#
-# Please follow us at @bddeditor AND if you find this tool useful please share with friends and colleagues!
+# Created by Sandy Tarke: 13 August, 2019
 #
 
 @Network-on-off 
 Feature: Network On or Off events
+
+Background:
+	Given Install Silent app on Windows OS
 
   @Network-On 
   Scenario: 1 Test Silent app with Network is On
@@ -30,6 +31,3 @@ Feature: Network On or Off events
     And The internet speed slows down
     Then Silent app should keep tracking time
     And App should try to upload data with some periodical intervals
-
-  Scenario: 
-    Given 
