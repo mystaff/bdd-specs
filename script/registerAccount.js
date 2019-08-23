@@ -149,4 +149,4 @@ console.log(
 
 
 // installTDSilentApp();
-testTDSilentApp();
+// testTDSilentApp();

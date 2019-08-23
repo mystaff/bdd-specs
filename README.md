@@ -9,3 +9,12 @@ This directory contains feature specs.
 
 
 Note: This is still in progress.
+
+To run automation testing script follow this:
+
+        cd script 
+        npm i
+        npm install -g ./
+        td list
+        
+
