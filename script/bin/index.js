@@ -1,37 +1,51 @@
 #!/usr/bin/env node
 const program = require('commander');
-const list = require('../lib/list');
-const order = require('../lib/order');
+const company = require('../lib/company');
 
-/*******************************************/
+/** **************************************** */
 
-// Print td commands menu
-// $ td list
-// $ td ls
+// $ td init
+// $ td i
 program
-    .command('list') // sub-command name
-    .alias('ls') // alternative sub-command is `al`
-    .description('List coffee menu') // command description
-
-    // function to execute when command is uses
-    .action(function () {
-        list();
-    });
+  .command('init')
+  .alias('i')
+  .description('Create company and cache all details locally.')
+  .action(() => {
+    company.init();
+  });
 
 
-// Order a coffee
-// $ td order
-// $ td o
+// $ td setup
+// $ td s
 program
-    .command('order') // sub-command name
-    .alias('o') // alternative sub-command is `o`
-    .description('Order a coffee') // command description
+  .command('setup')
+  .alias('s')
+  .description('Download desktop application.')
+  .action(() => {
+    company.init();
+  });
 
-    // function to execute when command is uses
-    .action(function () {
-        order();
-    });
 
+// $ td remove
+// $ td r
+program
+  .command('remove')
+  .alias('r')
+  .description('Delete desktop application.')
+  .action(() => {
+    company.init();
+  });
+
+
+// $ td check
+// $ td c
+program
+  .command('check')
+  .alias('c')
+  .description('Check if TD silent application is running.')
+  .action(() => {
+    company.init();
+  });
 
 // allow commander to parse `process.argv`
 program.parse(process.argv);
