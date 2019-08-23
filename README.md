@@ -15,6 +15,18 @@ To run automation testing script follow this:
         cd script 
         npm i
         npm install -g ./
-        td list
+        
+        
+        td --help
+        Usage: td [options] [command]
+        
+        Options:
+          -h, --help  output usage information
+        
+        Commands:
+          init|i      Create company and cache all details locally.
+          setup|s     Download desktop application.
+          remove|r    Delete desktop application.
+          check|c     Check if TD silent application is running.
         
 

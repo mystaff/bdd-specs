@@ -9,18 +9,38 @@ const company = require('../lib/company');
 program
   .command('init')
   .alias('i')
-  .description('Create company and cache all details locally.')
+  .description('Company: Create company and cache all details locally.')
   .action(() => {
     company.init();
   });
 
+
+// $ td status
+// $ td st
+program
+    .command('status')
+    .alias('st')
+    .description('Company: Check if local created company is cached".')
+    .action(() => {
+        company.statusCachedCompany();
+    });
+
+// $ td delete
+// $ td d
+program
+    .command('delete')
+    .alias('del')
+    .description('Company: Delete local created company to signup new one, DO NOT FORGOT TO RUN "td remove".')
+    .action(() => {
+        company.deleteCachedCompany();
+    });
 
 // $ td setup
 // $ td s
 program
   .command('setup')
   .alias('s')
-  .description('Download desktop application.')
+  .description('App: Download desktop application.')
   .action(() => {
     company.init();
   });
@@ -31,7 +51,7 @@ program
 program
   .command('remove')
   .alias('r')
-  .description('Delete desktop application.')
+  .description('App: Delete desktop application.')
   .action(() => {
     company.init();
   });
@@ -42,10 +62,12 @@ program
 program
   .command('check')
   .alias('c')
-  .description('Check if TD silent application is running.')
+  .description('App: Check if TD silent application is running.')
   .action(() => {
     company.init();
   });
+
+
 
 // allow commander to parse `process.argv`
 program.parse(process.argv);
