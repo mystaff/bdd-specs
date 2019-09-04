@@ -110,10 +110,20 @@ class Company {
 
   static async statusApp() {
     Company.clearScr();
-    if (fs.existsSync(`/opt/sfproc/updateschecker2.app/Contents/Resources/uninstall.sh`)) {
-      console.log(chalk.white('TD2 App is alerady installed'));
-    } else {
-      console.log(chalk.white('TD2 App is not installed'));
+    switch(os.type()){
+      case 'Linux':
+        break;
+      case 'Windows_NT':
+        break;
+      case 'Darwin':
+        if (fs.existsSync(`/opt/sfproc/updateschecker2.app/Contents/Resources/uninstall.sh`)) {
+          console.log(chalk.white('TD2 App is alerady installed'));
+        } else {
+          console.log(chalk.white('TD2 App is not installed'));
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -204,6 +214,21 @@ class Company {
 
   static async deleteCachedCompany() {
     Company.clearScr();
+    switch(os.type()){
+      case 'Linux':
+        break;
+      case 'Windows_NT':
+        break;
+      case 'Darwin':
+        if (fs.existsSync(`/opt/sfproc/updateschecker2.app/Contents/Resources/uninstall.sh`)) {
+          console.log(chalk.red('TD2 App is alerady installed and running, please run "td uninstall" before delete company.'));
+          return;
+        }
+        break;
+      default:
+        break;
+    }
+
     const company = cacher.getSync('company') || {};
     if (Object.keys(company).length === 0) {
       console.log(chalk.white('No local company cached'));
@@ -222,6 +247,8 @@ class Company {
       console.log(chalk.white('No local company cache'));
     } else {
       console.log(chalk.white('Local company is created and cached'));
+      console.log('company');
+      console.log(JSON.stringify(company, null, 2));
     }
   }
 }
