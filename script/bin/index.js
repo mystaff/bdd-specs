@@ -42,7 +42,7 @@ program
   .alias('s')
   .description('App: Download desktop application.')
   .action(() => {
-    company.init();
+    company.installTDSilentApp();
   });
 
 
@@ -53,7 +53,7 @@ program
   .alias('r')
   .description('App: Delete desktop application.')
   .action(() => {
-    company.init();
+    company.uninstallApp();
   });
 
 
@@ -64,7 +64,7 @@ program
   .alias('c')
   .description('App: Check if TD silent application is running.')
   .action(() => {
-    company.init();
+    company.statusApp();
   });
 
 

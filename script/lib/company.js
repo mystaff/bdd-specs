@@ -6,6 +6,8 @@ const clear = require('clear');
 const figlet = require('figlet');
 const cache = require('persistent-cache');
 const cacher = cache();
+const companyHelper = require('../lib/company');
+const os = require('os');
 
 
 class Company {
@@ -60,38 +62,94 @@ class Company {
       }
   }
 
-
-
-  static async  installTDSilentApp() {
+  static async installTDSilentApp() {
     Company.clearScr();
     const company = cacher.getSync('company') || {};
     if (Object.keys(company).length === 0) {
-      signup();
+      console.log(chalk.red('No local company cached'));
+      return;
     }
     console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please be wait .. that might take a while..'));
+    //console.log(os.type());//'Linux' on Linux, 'Darwin' on macOS, and 'Windows_NT' on Windows.
+    switch(os.type()){
+      case 'Linux':
+        break;
+      case 'Windows_NT':
+        break;
+      case 'Darwin':
+        const { spawn } = require('child_process');
+        let ls = spawn('/bin/sh', [ '-c', `curl -s 'https://9hnz5b9yag.execute-api.us-east-1.amazonaws.com/production/bash-install-generator?hostname=2.timedoctor.com&companyId=${company.res.data.companyId}' | sudo /bin/bash` ])
+        ls.stdout.on('data', (data) => {
+          Company.clearScr();
+          console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please wait .. that might take a while..'));
+          console.log(`${data}`);
+        });
+        ls.stderr.on('data', (data) => {
+          Company.clearScr();
+          console.log(chalk.yellow('----------install TD2 Silent App------------------ .. please wait .. that might take a while..'));
+          console.log(`${data}`);
+        });
+        ls.on('close', (code) => {
+          console.log(chalk.green(`TD2 installing finished.`));
+        });
+        break;
+      default:
+        break;
+    }
+    return;
     // todo check OS
     // if mac --->
-    const { exec } = require('child_process');
-    const args = ` -s 'https://9hnz5b9yag.execute-api.us-east-1.amazonaws.com/production/bash-install-generator?hostname=2.timedoctor.com&companyId=${company.res.data.companyId}' | sudo /bin/bash`;
-    exec(`curl ${args}`, (error, stdout, stderr) => {
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
-      if (error !== null) {
-        console.log(`exec error: ${error}`);
-      }
-    });
     // MAC
     // curl -s 'https://9hnz5b9yag.execute-api.us-east-1.amazonaws.com/production/bash-install-generator?hostname=2.timedoctor.com&companyId=XU2nb5vGxQAabhC9' | sudo /bin/bash
     // For Mac, run this command in the terminal: sudo /opt/sfproc/updateschecker2.app/Contents/Resources/uninstall.sh
-
-
     // UBUNTU
     // wget -q -O - 'https://9x0u6wwr6c.execute-api.us-east-1.amazonaws.com/production/bash-install-generator?hostname=2.timedoctor.com&companyId=XU2nb5vGxQAabhC9' | sudo /bin/bash
-
     // WIN
     // https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?companyId=XU2nb5vGxQAabhC9&hostname=2.timedoctor.com
   };
 
+  static async statusApp() {
+    Company.clearScr();
+    if (fs.existsSync(`/opt/sfproc/updateschecker2.app/Contents/Resources/uninstall.sh`)) {
+      console.log(chalk.white('TD2 App is alerady installed'));
+    } else {
+      console.log(chalk.white('TD2 App is not installed'));
+    }
+  }
+
+  static async uninstallApp() {
+    Company.clearScr();
+    const company = cacher.getSync('company') || {};
+    if (Object.keys(company).length === 0) {
+      console.log(chalk.red('No local company cached'));
+      return;
+    }
+    console.log(chalk.yellow('----------uninstall TD2 Silent App------------------ .. please wait .. that might take a while..'));
+    switch(os.type()){
+      case 'Linux':
+        break;
+      case 'Windows_NT':
+        break;
+      case 'Darwin':
+        const { spawn } = require('child_process');
+        var ls = spawn("sudo", ["/opt/sfproc/updateschecker2.app/Contents/Resources/uninstall.sh"])
+        ls.stdout.on('data', (data) => {
+          Company.clearScr();
+          console.log(chalk.yellow('----------uninstall TD2 Silent App------------------ .. please wait .. that might take a while..'));
+          console.log(`${data}`);
+        });
+        ls.stderr.on('data', (data) => {
+          console.log(chalk.red(`${data}`));
+        });
+        ls.on('close', (code) => {
+          console.log(chalk.green(`TD2 uninstalling finished.`));
+        });
+        break;
+      default:
+        break;
+    }
+    return;
+  }
 
   static async testTDSilentApp () {
     Company.clearScr();
@@ -148,13 +206,14 @@ class Company {
     Company.clearScr();
     const company = cacher.getSync('company') || {};
     if (Object.keys(company).length === 0) {
-      console.log(chalk.white('No local company cache'));
+      console.log(chalk.white('No local company cached'));
     } else {
       console.log(chalk.white('deleting local cache'));
       cacher.putSync('company', {});
       console.log(chalk.white('DONE'));
     }
   }
+
 
   static async statusCachedCompany() {
     Company.clearScr();
