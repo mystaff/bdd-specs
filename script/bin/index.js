@@ -20,7 +20,7 @@ program
 // $ td d
 program
     .command('delete')
-    .alias('del')
+    .alias('d')
     .description('Company: Delete local created company to signup new one, DO NOT FORGOT TO RUN "td remove".')
     .action(() => {
         company.deleteCachedCompany();
