@@ -12,3 +12,4 @@ script/cache/cache/*
 script/cache/*
 script/bin/cache/*
 script/bin/cache/cache/*
+script/lib/downloads/
