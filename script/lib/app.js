@@ -112,16 +112,17 @@ class App {
             console.log('START spawn 3 if');
         }else{
 
+            /*
             var os = require('os'),
                 path = require('path'),
                 setup = require('child_process').spawn;
 
 //1)uncomment following if you want to redirect standard output and error from the process to files
-            /*
-            var fs = require('fs');
-            var out = fs.openSync('./out.log', 'a');
-            var err = fs.openSync('./out.log', 'a');
-            */
+
+            //var fs = require('fs');
+            //var out = fs.openSync('./out.log', 'a');
+            //var err = fs.openSync('./out.log', 'a');
+
             var fileName = file_name;
 
 //spawn command line (cmd as first param to spawn)
@@ -134,15 +135,15 @@ class App {
             });
 
 //2) uncomment following if you want to "react" somehow to standard output and error from the process
-            /*
-            child.stdout.on('data', function(data) {
-              console.log("stdout: " + data);
-            });
 
-            child.stderr.on('data', function(data) {
-              console.log("stdout: " + data);
-            });
-            */
+            //child.stdout.on('data', function(data) {
+             /// console.log("stdout: " + data);
+            //});
+
+            //child.stderr.on('data', function(data) {
+             // console.log("stdout: " + data);
+            //});
+
 
 //here you can "react" when the spawned process ends
             child.on('close', function(code) {
@@ -156,24 +157,26 @@ class App {
             child.unref();
 
 
-            // console.log(chalk.green(`START TD2 installing ...`));
-            // const util = require('util');
-            // const exec = util.promisify(require('child_process').exec);
-            // try {
-            //     const {stdout, stderr} = await exec(`msiexec /quiet /qn /norestart /i '` + DOWNLOAD_DIR + '\\' + file_name + `'`);
-            //
-            //     if (stderro) {
-            //         console.error(`error: ${stderr}`);
-            //     }
-            //     console.log(`Number of files ${stdout}`);
-            // } catch (error) {
-            //     console.log(chalk.red('error in post'));
-            //     console.log(chalk.green(error.stdout));
-            //     console.log(chalk.red(error.stderr));
-            //     console.log(chalk.red(JSON.stringify(error, null, 2)));
-            //     console.log('----------------------------');
-            // }
-            // console.log(chalk.green(`END TD2 installing ...`));
+            */
+
+            console.log(chalk.green(`START TD2 installing ...`));
+            const util = require('util');
+            const exec = util.promisify(require('child_process').exec);
+            try {
+                const {stdout, stderr} = await exec(`msiexec /quiet /qn /norestart /i '` + DOWNLOAD_DIR + '\\' + file_name + `'`);
+
+                if (stderro) {
+                    console.error(`error: ${stderr}`);
+                }
+                console.log(`Number of files ${stdout}`);
+            } catch (error) {
+                console.log(chalk.red('error in post'));
+                console.log(chalk.green(error.stdout));
+                console.log(chalk.red(error.stderr));
+                console.log(chalk.red(JSON.stringify(error, null, 2)));
+                console.log('----------------------------');
+            }
+            console.log(chalk.green(`END TD2 installing ...`));
         }
 
         console.log('DONE');
