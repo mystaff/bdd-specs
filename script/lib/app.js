@@ -7,8 +7,10 @@ const figlet = require('figlet');
 const cache = require('persistent-cache');
 const cacher = cache();
 const os = require('os');
-var mainUrl = require('url');
-
+const mainUrl = require('url');
+const http = require('http');
+const fs = require('fs');
+const {spawn} = require('child_process');
 
 class App {
 
@@ -72,13 +74,9 @@ class App {
             console.log(chalk.red('No local company cached'));
             return;
         }
-        var http = require('http');
-        var fs = require('fs');
-        const {spawn} = require('child_process');
         const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=' + company.res.data.companyId;
         let resw = await axios.get(file_url);
         const locURL = resw.request.res.responseUrl;
-        const mainUrl = require('url');
         const queryString = require('query-string');
         const url_parts = mainUrl.parse(locURL, true);
         const parsed    = queryString.parse(url_parts.search);
