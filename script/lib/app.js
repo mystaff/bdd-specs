@@ -81,11 +81,11 @@ class App {
 
 
     static async uninstallWindowsApp(file_name) {
-        const command = `/quiet /qn /norestart /uninstall ${DOWNLOAD_DIR}\\${file_name}`;
+        const command = [`/quiet /qn /norestart /uninstall` , `${DOWNLOAD_DIR}\\${file_name}`];
         console.log('command');
         console.log(command);
         //spawn command line (cmd as first param to spawn)
-        var child = spawn('msiexec', [command], { // /S strips quotes and /C executes the runnable file (node way)
+        var child = spawn('msiexec', command, { // /S strips quotes and /C executes the runnable file (node way)
             detached: true, //see node docs to see what it does
             cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
             env: process.env
