@@ -12,6 +12,50 @@ var mainUrl = require('url');
 
 class App {
 
+    static async download(file_name) {
+        /* */
+        var os = require('os'),
+            path = require('path'),
+            setup = require('child_process').spawn;
+
+        //1)uncomment following if you want to redirect standard output and error from the process to files
+
+        var fs = require('fs');
+        var out = fs.openSync('./out.log', 'a');
+        var err = fs.openSync('./out.log', 'a');
+
+        var fileName = file_name;
+
+        //spawn command line (cmd as first param to spawn)
+        var child = spawn('cmd', ["/S /C " + DOWNLOAD_DIR + '\\' + fileName], { // /S strips quotes and /C executes the runnable file (node way)
+            detached: true, //see node docs to see what it does
+            cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
+            env: process.env
+            //1) uncomment following if you want to "redirect" standard output and error from the process to files
+            //stdio: ['ignore', out, err]
+        });
+
+        //2) uncomment following if you want to "react" somehow to standard output and error from the process
+        child.stdout.on('data', function(data) {
+            console.log("stdout: " + data);
+        });
+
+        child.stderr.on('data', function(data) {
+            console.log("stdout: " + data);
+        });
+
+        //here you can "react" when the spawned process ends
+        child.on('close', function(code) {
+            console.log("Child process exited with code " + code);
+        });
+
+        // THIS IS TAKEN FROM NODE JS DOCS
+        // By default, the parent will wait for the detached child to exit.
+        // To prevent the parent from waiting for a given child, use the child.unref() method,
+        // and the parent's event loop will not include the child in its reference count.
+        child.unref();
+    }
+
     static async clearScr() {
         clear();
         console.log(
@@ -30,35 +74,10 @@ class App {
         }
         var http = require('http');
         var fs = require('fs');
-
-        // var download = function(url, dest, cb) {
-        //   var file = fs.createWriteStream(dest);
-        //   var request = http.get(url, function(response) {
-        //     response.pipe(file);
-        //     file.on('finish', function() {
-        //       file.close(cb);  // close() is async, call cb after close completes.
-        //     });
-        //   });
-        // }
-        //
-        // // console.log(__dirname);
-        // // extract the file name
-        // const { exec } = require('child_process');
         const {spawn} = require('child_process');
         const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=' + company.res.data.companyId;
         let resw = await axios.get(file_url);
         const locURL = resw.request.res.responseUrl;
-        // console.log(resw.request.res.responseUrl);
-        // return;
-        // axios.get(file_url).then(function(response) {
-        //     var fetchedUrls = response.request.res.responseUrl;
-        //     // console.log(response.request.res)
-        //     console.log(fetchedUrls)
-        // });
-        // let res = await App.doRequest({url: file_url, followRedirect: false});
-        // console.log(res);
-        // return;
-
         const mainUrl = require('url');
         const queryString = require('query-string');
         const url_parts = mainUrl.parse(locURL, true);
@@ -67,7 +86,6 @@ class App {
         let file_name = ar[1];
         var DOWNLOAD_DIR = __dirname;
         // var DOWNLOAD_DIR = __dirname + '\\downloads\\';
-        // let file_name = 'TD2.msi';
         console.log("BEFORE IF");
         console.log((file_name));
         console.log(fs.existsSync(file_name));
@@ -91,120 +109,18 @@ class App {
             curl.stdout.on('end', function (data) {
                 file.end();
                 console.log(file_name + ' downloaded  ' );
+                App.download(file_name);
             });
             console.log('START spawn 2 if');
             // when the spawn child process exits, check if there were any errors and close the writeable stream
             curl.on('exit', function (code) {
                 if (code != 0) {
                     console.log('Failed: ' + code);
-                }else{
-                    console.log(chalk.yellow('----------downloading TD2 Silent App------------------ ..please wait .. that might take a while..'));
-                    /* */
-                    var os = require('os'),
-                        path = require('path'),
-                        setup = require('child_process').spawn;
-
-                    //1)uncomment following if you want to redirect standard output and error from the process to files
-
-                    var fs = require('fs');
-                    var out = fs.openSync('./out.log', 'a');
-                    var err = fs.openSync('./out.log', 'a');
-
-                    var fileName = file_name;
-
-                    //spawn command line (cmd as first param to spawn)
-                    var child = spawn('cmd', ["/S /C " + DOWNLOAD_DIR + '\\' + fileName], { // /S strips quotes and /C executes the runnable file (node way)
-                        detached: true, //see node docs to see what it does
-                        cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
-                        env: process.env
-                        //1) uncomment following if you want to "redirect" standard output and error from the process to files
-                        //stdio: ['ignore', out, err]
-                    });
-
-                    //2) uncomment following if you want to "react" somehow to standard output and error from the process
-                    child.stdout.on('data', function(data) {
-                        console.log("stdout: " + data);
-                    });
-
-                    child.stderr.on('data', function(data) {
-                        console.log("stdout: " + data);
-                    });
-
-                    //here you can "react" when the spawned process ends
-                    child.on('close', function(code) {
-                        console.log("Child process exited with code " + code);
-                    });
-
-                    // THIS IS TAKEN FROM NODE JS DOCS
-                    // By default, the parent will wait for the detached child to exit.
-                    // To prevent the parent from waiting for a given child, use the child.unref() method,
-                    // and the parent's event loop will not include the child in its reference count.
-                    child.unref();
                 }
             });
             console.log('START spawn 3 if');
         }else{
-
-            /* */
-            var os = require('os'),
-                path = require('path'),
-                setup = require('child_process').spawn;
-
-            //1)uncomment following if you want to redirect standard output and error from the process to files
-
-            var fs = require('fs');
-            var out = fs.openSync('./out.log', 'a');
-            var err = fs.openSync('./out.log', 'a');
-
-            var fileName = file_name;
-
-            //spawn command line (cmd as first param to spawn)
-            var child = spawn('cmd', ["/S /C " + DOWNLOAD_DIR + '\\' + fileName], { // /S strips quotes and /C executes the runnable file (node way)
-                detached: true, //see node docs to see what it does
-                cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
-                env: process.env
-                //1) uncomment following if you want to "redirect" standard output and error from the process to files
-                //stdio: ['ignore', out, err]
-            });
-
-            //2) uncomment following if you want to "react" somehow to standard output and error from the process
-            child.stdout.on('data', function(data) {
-              console.log("stdout: " + data);
-            });
-
-            child.stderr.on('data', function(data) {
-             console.log("stdout: " + data);
-            });
-
-            //here you can "react" when the spawned process ends
-            child.on('close', function(code) {
-                console.log("Child process exited with code " + code);
-            });
-
-            // THIS IS TAKEN FROM NODE JS DOCS
-            // By default, the parent will wait for the detached child to exit.
-            // To prevent the parent from waiting for a given child, use the child.unref() method,
-            // and the parent's event loop will not include the child in its reference count.
-            child.unref();
-
-
-            // console.log(chalk.green(`START TD2 installing ...`));
-            // const util = require('util');
-            // const exec = util.promisify(require('child_process').exec);
-            // try {
-            //     const {stdout, stderr} = await exec(`msiexec /quiet /qn /norestart /passive /i '` + DOWNLOAD_DIR + '\\' + file_name + `'`);
-            //     if (stderro) {
-            //         console.error(`error: ${stderr}`);
-            //     }
-            //     console.log(`Number of files ${stdout}`);
-            // } catch (error) {
-            //     console.log(chalk.red('error in post'));
-            //     console.log(chalk.green(error.stdout));
-            //     console.log(chalk.red(error.stderr));
-            //     console.log(chalk.red(JSON.stringify(error, null, 2)));
-            //     console.log('----------------------------');
-            // }
-            // console.log(chalk.green(`END TD2 installing ...`));
+            App.download(file_name);
         }
 
         console.log('DONE');
