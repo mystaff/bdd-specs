@@ -105,6 +105,7 @@ class App {
         console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please be wait .. that might take a while..'));
         switch (os.type()) {
             case 'Linux':
+                console.log(chalk.white('TD2 App on Linux is not implemented yet.'));
                 break;
             case 'Windows_NT':
                 let file_name = cacher.getSync('file_name') || null;
@@ -169,6 +170,7 @@ class App {
         App.clearScr();
         switch (os.type()) {
             case 'Linux':
+                console.log(chalk.white('TD2 App on Linux is not implemented yet.'));
                 break;
             case 'Windows_NT':
                 let file_name = cacher.getSync('file_name') || null;
@@ -217,6 +219,7 @@ class App {
         console.log(chalk.yellow('----------uninstall TD2 Silent App------------------ .. please wait .. that might take a while..'));
         switch (os.type()) {
             case 'Linux':
+                console.log(chalk.white('TD2 App on Linux is not implemented yet.'));
                 break;
             case 'Windows_NT':
                 let file_name = cacher.getSync('file_name') || null;
