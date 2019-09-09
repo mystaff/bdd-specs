@@ -162,12 +162,12 @@ class App {
                 const {spawn} = require('child_process');
                 let ls = spawn('/bin/sh', ['-c', `curl -s 'https://9hnz5b9yag.execute-api.us-east-1.amazonaws.com/production/bash-install-generator?hostname=2.timedoctor.com&companyId=${company.res.data.companyId}' | sudo /bin/bash`])
                 ls.stdout.on('data', (data) => {
-                    Company.clearScr();
+                    App.clearScr();
                     console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please wait .. that might take a while..'));
                     console.log(`${data}`);
                 });
                 ls.stderr.on('data', (data) => {
-                    Company.clearScr();
+                    App.clearScr();
                     console.log(chalk.yellow('----------install TD2 Silent App------------------ .. please wait .. that might take a while..'));
                     console.log(`${data}`);
                 });
@@ -191,7 +191,7 @@ class App {
     };
 
     static async statusApp() {
-        Company.clearScr();
+        App.clearScr();
         switch (os.type()) {
             case 'Linux':
                 break;
@@ -221,7 +221,7 @@ class App {
 
 
     static async uninstallApp() {
-        Company.clearScr();
+        App.clearScr();
         const company = cacher.getSync('company') || {};
         if (Object.keys(company).length === 0) {
             console.log(chalk.red('No local company cached'));
@@ -251,7 +251,7 @@ class App {
                 const {spawn} = require('child_process');
                 var ls = spawn("sudo", ["/opt/sfproc/updateschecker2.app/Contents/Resources/uninstall.sh"])
                 ls.stdout.on('data', (data) => {
-                    Company.clearScr();
+                    App.clearScr();
                     console.log(chalk.yellow('----------uninstall TD2 Silent App------------------ .. please wait .. that might take a while..'));
                     console.log(`${data}`);
                 });
@@ -269,7 +269,7 @@ class App {
     }
 
     static async testTDSilentApp() {
-        Company.clearScr();
+        App.clearScr();
         const n = 2000;
         let i = 1;
         const interval = setInterval(() => {
