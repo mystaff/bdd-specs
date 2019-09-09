@@ -59,6 +59,7 @@ class App {
         const parsed    = queryString.parse(url_parts.search);
         const ar = parsed["response-content-disposition"].split('"');
         let file_name = ar[1];
+        var DOWNLOAD_DIR = __dirname;
         // var DOWNLOAD_DIR = __dirname + '\\downloads\\';
         // let file_name = 'TD2.msi';
         console.log("BEFORE IF");
@@ -114,7 +115,7 @@ class App {
             console.log(chalk.green(`START TD2 installing ...`));
             const util = require('util');
             const exec = util.promisify(require('child_process').exec);
-            const { stdout, stderr } = await exec('msiexec /quiet /qn /norestart /i ' + file_name);
+            const { stdout, stderr } = await exec('msiexec /quiet /qn /norestart /i ' + DOWNLOAD_DIR + '\\'+ file_name);
             if (stderro) {
                 console.error(`error: ${stderr}`);
             }
