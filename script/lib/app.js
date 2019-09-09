@@ -61,6 +61,7 @@ class App {
         let file_name = ar[1];
         var DOWNLOAD_DIR = __dirname + '/downloads/';
         // let file_name = 'TD2.msi';
+        console.log(fs.existsSync(DOWNLOAD_DIR + file_name));
         if (!fs.existsSync(DOWNLOAD_DIR + file_name)) {
             // create an instance of writable stream
             var file = fs.createWriteStream(DOWNLOAD_DIR + file_name);
