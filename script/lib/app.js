@@ -9,7 +9,6 @@ const cacher = cache();
 const os = require('os');
 const mainUrl = require('url');
 const http = require('http');
-const fs = require('fs');
 const {spawn} = require('child_process');
 
 class App {
