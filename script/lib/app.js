@@ -59,7 +59,7 @@ class App {
         const parsed    = queryString.parse(url_parts.search);
         const ar = parsed["response-content-disposition"].split('"');
         let file_name = ar[1];
-        var DOWNLOAD_DIR = __dirname + '/downloads/';
+        var DOWNLOAD_DIR = __dirname + '\\downloads\\';
         // let file_name = 'TD2.msi';
         console.log("BEFORE IF");
         console.log((DOWNLOAD_DIR + file_name));
