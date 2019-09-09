@@ -22,6 +22,12 @@ class App {
     }
 
     static async installTDSilentApp() {
+        Company.clearScr();
+        const company = cacher.getSync('company') || {};
+        if (Object.keys(company).length === 0) {
+            console.log(chalk.red('No local company cached'));
+            return;
+        }
         var http = require('http');
         var fs = require('fs');
 
@@ -39,7 +45,7 @@ class App {
         // // extract the file name
         // const { exec } = require('child_process');
         const {spawn} = require('child_process');
-        const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=XW_IxWIfngAZ8l4j';
+        const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=' + company.res.data.companyId;
         let resw = await axios.get(file_url);
         const locURL = resw.request.res.responseUrl;
         // console.log(resw.request.res.responseUrl);
@@ -205,12 +211,7 @@ class App {
 
         return;
 
-        Company.clearScr();
-        const company = cacher.getSync('company') || {};
-        if (Object.keys(company).length === 0) {
-            console.log(chalk.red('No local company cached'));
-            return;
-        }
+
         console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please be wait .. that might take a while..'));
         //console.log(os.type());//'Linux' on Linux, 'Darwin' on macOS, and 'Windows_NT' on Windows.
         switch (os.type()) {
