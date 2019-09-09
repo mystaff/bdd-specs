@@ -18,29 +18,23 @@ const err = fs.openSync('./out.log', 'a');
 class App {
 
     static async downloadWindowsApp(file_name) {
-        // create an instance of writable stream
         var file = fs.createWriteStream(`${DOWNLOAD_DIR}\\${file_name}`);
         console.log("AFTER createWriteStream");
         console.log((`${DOWNLOAD_DIR}\\${file_name}`));
         console.log(fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`));
-        // execute curl using child_process' spawn function
-        // var curl = spawn('curl', [file_url]);
         console.log('START spawn');
         let curl = spawn('curl', ['-L', file_url])
-        // add a 'data' event listener for the spawn instance
         curl.stdout.on('data', function (data) {
             console.log(chalk.yellow('----------downloading TD2 Silent App------------------ ..please wait .. that might take a while..'));
             file.write(data);
         });
         console.log('START spawn 1 if');
-        // add an 'end' event listener to close the writeable stream
         curl.stdout.on('end', function (data) {
             file.end();
             console.log(`${DOWNLOAD_DIR}\\${file_name}` + ' downloaded  ' );
             App.installWindowsApp(file_name);
         });
         console.log('START spawn 2 if');
-        // when the spawn child process exits, check if there were any errors and close the writeable stream
         curl.on('exit', function (code) {
             if (code != 0) {
                 console.log('Failed: ' + code);
@@ -53,29 +47,20 @@ class App {
         const command = `/S /C ${DOWNLOAD_DIR}\\${file_name}`;
         console.log('command');
         console.log(command);
-        //spawn command line (cmd as first param to spawn)
-        var child = spawn('cmd', [command], { // /S strips quotes and /C executes the runnable file (node way)
-            detached: true, //see node docs to see what it does
-            cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
+        var child = spawn('cmd', [command], {
+            detached: true,
+            cwd: os.homedir(),
             env: process.env
-            //1) uncomment following if you want to "redirect" standard output and error from the process to files
-            //stdio: ['ignore', out, err]
         });
-        //2) uncomment following if you want to "react" somehow to standard output and error from the process
         child.stdout.on('data', function(data) {
             console.log("stdout: " + data);
         });
         child.stderr.on('data', function(data) {
             console.log("stderr: " + data);
         });
-        //here you can "react" when the spawned process ends
         child.on('close', function(code) {
             console.log("Child process exited with code " + code);
         });
-        // THIS IS TAKEN FROM NODE JS DOCS
-        // By default, the parent will wait for the detached child to exit.
-        // To prevent the parent from waiting for a given child, use the child.unref() method,
-        // and the parent's event loop will not include the child in its reference count.
         child.unref();
     }
 
@@ -84,29 +69,20 @@ class App {
         const command = [`/quiet`, `/qn`, `/norestart`, `/uninstall` , `${DOWNLOAD_DIR}\\${file_name}`];
         console.log('command');
         console.log(command);
-        //spawn command line (cmd as first param to spawn)
-        var child = spawn('msiexec', command, { // /S strips quotes and /C executes the runnable file (node way)
-            detached: true, //see node docs to see what it does
-            cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
+        var child = spawn('msiexec', command, {
+            detached: true,
+            cwd: os.homedir(),
             env: process.env
-            //1) uncomment following if you want to "redirect" standard output and error from the process to files
-            //stdio: ['ignore', out, err]
         });
-        //2) uncomment following if you want to "react" somehow to standard output and error from the process
         child.stdout.on('data', function(data) {
             console.log("stdout: " + data);
         });
         child.stderr.on('data', function(data) {
             console.log("stderr: " + data);
         });
-        //here you can "react" when the spawned process ends
         child.on('close', function(code) {
             console.log("Child process exited with code " + code);
         });
-        // THIS IS TAKEN FROM NODE JS DOCS
-        // By default, the parent will wait for the detached child to exit.
-        // To prevent the parent from waiting for a given child, use the child.unref() method,
-        // and the parent's event loop will not include the child in its reference count.
         child.unref();
     }
 
@@ -127,7 +103,6 @@ class App {
             return;
         }
         console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please be wait .. that might take a while..'));
-        //console.log(os.type());//'Linux' on Linux, 'Darwin' on macOS, and 'Windows_NT' on Windows.
         switch (os.type()) {
             case 'Linux':
                 break;
@@ -196,6 +171,18 @@ class App {
             case 'Linux':
                 break;
             case 'Windows_NT':
+                let file_name = cacher.getSync('file_name') || null;
+                if (!file_name) {
+                    console.log('file_name not cached');
+                }else{
+                    console.log('file_name already cached');
+                }
+                if (!fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`)) {
+                    console.log('file_name not downloaded');
+                    return;
+                }else{
+                    console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded, lets uninstallWindowsApp');
+                }
                 break;
             case 'Darwin':
                 if (fs.existsSync(`/opt/sfproc/updateschecker2.app/Contents/Resources/uninstall.sh`)) {
