@@ -17,7 +17,39 @@ const err = fs.openSync('./out.log', 'a');
 
 class App {
 
-    static async download(file_name) {
+    static async downloadWindowsApp(file_name) {
+        // create an instance of writable stream
+        var file = fs.createWriteStream(`${DOWNLOAD_DIR}\\${file_name}`);
+        console.log("AFTER createWriteStream");
+        console.log((`${DOWNLOAD_DIR}\\${file_name}`));
+        console.log(fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`));
+        // execute curl using child_process' spawn function
+        // var curl = spawn('curl', [file_url]);
+        console.log('START spawn');
+        let curl = spawn('curl', ['-L', file_url])
+        // add a 'data' event listener for the spawn instance
+        curl.stdout.on('data', function (data) {
+            console.log(chalk.yellow('----------downloading TD2 Silent App------------------ ..please wait .. that might take a while..'));
+            file.write(data);
+        });
+        console.log('START spawn 1 if');
+        // add an 'end' event listener to close the writeable stream
+        curl.stdout.on('end', function (data) {
+            file.end();
+            console.log(`${DOWNLOAD_DIR}\\${file_name}` + ' downloaded  ' );
+            App.installWindowsApp(file_name);
+        });
+        console.log('START spawn 2 if');
+        // when the spawn child process exits, check if there were any errors and close the writeable stream
+        curl.on('exit', function (code) {
+            if (code != 0) {
+                console.log('Failed: ' + code);
+            }
+        });
+        console.log('START spawn 3 if');
+    }
+
+    static async installWindowsApp(file_name) {
 
         const command = `/S /C ${DOWNLOAD_DIR}\\${file_name}`;
 
@@ -70,72 +102,36 @@ class App {
             console.log(chalk.red('No local company cached'));
             return;
         }
-
-        let file_name = cacher.getSync('file_name') || null;
-        if (!file_name) {
-            const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=' + company.res.data.companyId;
-            let resw = await axios.get(file_url);
-            const locURL = resw.request.res.responseUrl;
-            const queryString = require('query-string');
-            const url_parts = mainUrl.parse(locURL, true);
-            const parsed    = queryString.parse(url_parts.search);
-            const ar = parsed["response-content-disposition"].split('"');
-            file_name = ar[1];
-            cacher.putSync('file_name', file_name);
-        }
-        
-        console.log("BEFORE IF");
-        console.log((file_name));
-        console.log(fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`));
-        if (!fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`)) {
-            // create an instance of writable stream
-            var file = fs.createWriteStream(`${DOWNLOAD_DIR}\\${file_name}`);
-            console.log("AFTER createWriteStream");
-            console.log((`${DOWNLOAD_DIR}\\${file_name}`));
-            console.log(fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`));
-            // execute curl using child_process' spawn function
-            // var curl = spawn('curl', [file_url]);
-            console.log('START spawn');
-            let curl = spawn('curl', ['-L', file_url])
-            // add a 'data' event listener for the spawn instance
-            curl.stdout.on('data', function (data) {
-                console.log(chalk.yellow('----------downloading TD2 Silent App------------------ ..please wait .. that might take a while..'));
-                file.write(data);
-            });
-            console.log('START spawn 1 if');
-            // add an 'end' event listener to close the writeable stream
-            curl.stdout.on('end', function (data) {
-                file.end();
-                console.log(`${DOWNLOAD_DIR}\\${file_name}` + ' downloaded  ' );
-                App.download(file_name);
-            });
-            console.log('START spawn 2 if');
-            // when the spawn child process exits, check if there were any errors and close the writeable stream
-            curl.on('exit', function (code) {
-                if (code != 0) {
-                    console.log('Failed: ' + code);
-                }
-            });
-            console.log('START spawn 3 if');
-        }else{
-            console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded  ' );
-            App.download(file_name);
-        }
-
-        console.log('DONE');
-
-        return;
-
-
         console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please be wait .. that might take a while..'));
         //console.log(os.type());//'Linux' on Linux, 'Darwin' on macOS, and 'Windows_NT' on Windows.
         switch (os.type()) {
             case 'Linux':
                 break;
             case 'Windows_NT':
+                let file_name = cacher.getSync('file_name') || null;
+                if (!file_name) {
+                    console.log('file_name not cached');
+                    const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=' + company.res.data.companyId;
+                    let resw = await axios.get(file_url);
+                    const locURL = resw.request.res.responseUrl;
+                    const queryString = require('query-string');
+                    const url_parts = mainUrl.parse(locURL, true);
+                    const parsed    = queryString.parse(url_parts.search);
+                    const ar = parsed["response-content-disposition"].split('"');
+                    file_name = ar[1];
+                    cacher.putSync('file_name', file_name);
+                }else{
+                    console.log('file_name already cached');
+                }
 
-
-                const url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=XW_DuwsxDAAh9jTs';
+                if (!fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`)) {
+                    App.downloadWindowsApp(file_name);
+                }else{
+                    console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded  ' );
+                    App.installWindowsApp(file_name);
+                }
+                console.log('DONE');
+                // const url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=XW_DuwsxDAAh9jTs';
                 // 'msiexec  /quiet /qn /norestart /i  sfproc-2.1.0.40-5d6fc8c5621f9e0019f25e23.msi';
                 // 'msiexec.exe /i sfproc-2.1.0.40-5d6fc8c5621f9e0019f25e23.msi /QN /L*V "msilog.log"';
                 break;
