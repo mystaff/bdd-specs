@@ -59,17 +59,17 @@ class App {
         const parsed    = queryString.parse(url_parts.search);
         const ar = parsed["response-content-disposition"].split('"');
         let file_name = ar[1];
-        var DOWNLOAD_DIR = __dirname + '\\downloads\\';
+        // var DOWNLOAD_DIR = __dirname + '\\downloads\\';
         // let file_name = 'TD2.msi';
         console.log("BEFORE IF");
-        console.log((DOWNLOAD_DIR + file_name));
-        console.log(fs.existsSync(DOWNLOAD_DIR + file_name));
-        if (!fs.existsSync(DOWNLOAD_DIR + file_name)) {
+        console.log((file_name));
+        console.log(fs.existsSync(file_name));
+        if (!fs.existsSync(file_name)) {
             // create an instance of writable stream
-            var file = fs.createWriteStream(DOWNLOAD_DIR + file_name);
+            var file = fs.createWriteStream(file_name);
             console.log("AFTER createWriteStream");
-            console.log((DOWNLOAD_DIR + file_name));
-            console.log(fs.existsSync(DOWNLOAD_DIR + file_name));
+            console.log((file_name));
+            console.log(fs.existsSync(file_name));
             // execute curl using child_process' spawn function
             // var curl = spawn('curl', [file_url]);
             console.log('START spawn');
@@ -83,7 +83,7 @@ class App {
             // add an 'end' event listener to close the writeable stream
             curl.stdout.on('end', function (data) {
                 file.end();
-                console.log(file_name + ' downloaded to ' + DOWNLOAD_DIR);
+                console.log(file_name + ' downloaded  ' );
             });
             console.log('START spawn 2 if');
             // when the spawn child process exits, check if there were any errors and close the writeable stream
@@ -92,7 +92,7 @@ class App {
                     console.log('Failed: ' + code);
                 }else{
                     console.log(chalk.yellow('----------downloading TD2 Silent App------------------ ..please wait .. that might take a while..'));
-                    let ls = spawn('msiexec', ['/i  /quiet /qn /norestart', DOWNLOAD_DIR + file_name])
+                    let ls = spawn('msiexec', ['/i  /quiet /qn /norestart', file_name])
                     ls.stdout.on('data', (data) => {
                         Company.clearScr();
                         console.log(chalk.yellow('----------downloading TD2 windows Silent App------------------ ..please wait .. that might take a while..'));
