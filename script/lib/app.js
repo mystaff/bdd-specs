@@ -22,7 +22,7 @@ class App {
     }
 
     static async installTDSilentApp() {
-        Company.clearScr();
+        App.clearScr();
         const company = cacher.getSync('company') || {};
         if (Object.keys(company).length === 0) {
             console.log(chalk.red('No local company cached'));
