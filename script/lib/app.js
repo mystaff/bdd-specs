@@ -18,9 +18,12 @@ const err = fs.openSync('./out.log', 'a');
 class App {
 
     static async download(file_name) {
+
         const command = `/S /C ${DOWNLOAD_DIR}\\${file_name}`;
+
         console.log('command');
         console.log(command);
+
         //spawn command line (cmd as first param to spawn)
         var child = spawn('cmd', [command], { // /S strips quotes and /C executes the runnable file (node way)
             detached: true, //see node docs to see what it does
@@ -67,15 +70,20 @@ class App {
             console.log(chalk.red('No local company cached'));
             return;
         }
-        const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=' + company.res.data.companyId;
-        let resw = await axios.get(file_url);
-        const locURL = resw.request.res.responseUrl;
-        const queryString = require('query-string');
-        const url_parts = mainUrl.parse(locURL, true);
-        const parsed    = queryString.parse(url_parts.search);
-        const ar = parsed["response-content-disposition"].split('"');
-        let file_name = ar[1];
-        // var DOWNLOAD_DIR = __dirname + '\\downloads\\';
+
+        let file_name = cacher.getSync('file_name') || null;
+        if (!file_name) {
+            const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=' + company.res.data.companyId;
+            let resw = await axios.get(file_url);
+            const locURL = resw.request.res.responseUrl;
+            const queryString = require('query-string');
+            const url_parts = mainUrl.parse(locURL, true);
+            const parsed    = queryString.parse(url_parts.search);
+            const ar = parsed["response-content-disposition"].split('"');
+            file_name = ar[1];
+            cacher.putSync('file_name', file_name);
+        }
+        
         console.log("BEFORE IF");
         console.log((file_name));
         console.log(fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`));
