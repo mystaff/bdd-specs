@@ -109,6 +109,17 @@ class App {
                 }
             });
             console.log('START spawn 3 if');
+        }else{
+
+            console.log(chalk.green(`START TD2 installing ...`));
+            const util = require('util');
+            const exec = util.promisify(require('child_process').exec);
+            const { stdout, stderr } = await exec('msiexec /quiet /qn /norestart /i ' + file_name);
+            if (stderro) {
+                console.error(`error: ${stderr}`);
+            }
+            console.log(`Number of files ${stdout}`);
+            console.log(chalk.green(`END TD2 installing ...`));
         }
 
         console.log('DONE');
@@ -130,7 +141,8 @@ class App {
 
 
                 const url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=XW_DuwsxDAAh9jTs';
-                // 'msiexec /i  sfproc-2.1.0.40-5d6fc3bb0b310c0021f634ec.msi /quiet /qn /norestart';
+                // 'msiexec  /quiet /qn /norestart /i  sfproc-2.1.0.40-5d6fc8c5621f9e0019f25e23.msi';
+                // 'msiexec.exe /i sfproc-2.1.0.40-5d6fc8c5621f9e0019f25e23.msi /QN /L*V "msilog.log"';
                 break;
             case 'Darwin':
                 const {spawn} = require('child_process');
