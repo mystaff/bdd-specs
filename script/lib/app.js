@@ -50,12 +50,9 @@ class App {
     }
 
     static async installWindowsApp(file_name) {
-
         const command = `/S /C ${DOWNLOAD_DIR}\\${file_name}`;
-
         console.log('command');
         console.log(command);
-
         //spawn command line (cmd as first param to spawn)
         var child = spawn('cmd', [command], { // /S strips quotes and /C executes the runnable file (node way)
             detached: true, //see node docs to see what it does
@@ -64,21 +61,48 @@ class App {
             //1) uncomment following if you want to "redirect" standard output and error from the process to files
             //stdio: ['ignore', out, err]
         });
-
         //2) uncomment following if you want to "react" somehow to standard output and error from the process
         child.stdout.on('data', function(data) {
             console.log("stdout: " + data);
         });
-
         child.stderr.on('data', function(data) {
             console.log("stderr: " + data);
         });
-
         //here you can "react" when the spawned process ends
         child.on('close', function(code) {
             console.log("Child process exited with code " + code);
         });
+        // THIS IS TAKEN FROM NODE JS DOCS
+        // By default, the parent will wait for the detached child to exit.
+        // To prevent the parent from waiting for a given child, use the child.unref() method,
+        // and the parent's event loop will not include the child in its reference count.
+        child.unref();
+    }
 
+
+    static async uninstallWindowsApp(file_name) {
+        const command = `/x ${DOWNLOAD_DIR}\\${file_name}`;
+        console.log('command');
+        console.log(command);
+        //spawn command line (cmd as first param to spawn)
+        var child = spawn('msiexec', [command], { // /S strips quotes and /C executes the runnable file (node way)
+            detached: true, //see node docs to see what it does
+            cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
+            env: process.env
+            //1) uncomment following if you want to "redirect" standard output and error from the process to files
+            //stdio: ['ignore', out, err]
+        });
+        //2) uncomment following if you want to "react" somehow to standard output and error from the process
+        child.stdout.on('data', function(data) {
+            console.log("stdout: " + data);
+        });
+        child.stderr.on('data', function(data) {
+            console.log("stderr: " + data);
+        });
+        //here you can "react" when the spawned process ends
+        child.on('close', function(code) {
+            console.log("Child process exited with code " + code);
+        });
         // THIS IS TAKEN FROM NODE JS DOCS
         // By default, the parent will wait for the detached child to exit.
         // To prevent the parent from waiting for a given child, use the child.unref() method,
@@ -123,7 +147,6 @@ class App {
                 }else{
                     console.log('file_name already cached');
                 }
-
                 if (!fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`)) {
                     App.downloadWindowsApp(file_name);
                 }else{
@@ -209,6 +232,20 @@ class App {
             case 'Linux':
                 break;
             case 'Windows_NT':
+                let file_name = cacher.getSync('file_name') || null;
+                if (!file_name) {
+                    console.log('file_name not cached');
+                    return;
+                }else{
+                    console.log('file_name already cached');
+                }
+                if (!fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`)) {
+                    console.log('file_name not downloaded');
+                    return;
+                }else{
+                    console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded, lets uninstallWindowsApp ' );
+                    App.uninstallWindowsApp(file_name);
+                }
                 break;
             case 'Darwin':
                 const {spawn} = require('child_process');
