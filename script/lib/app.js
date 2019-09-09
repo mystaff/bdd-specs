@@ -112,7 +112,7 @@ class App {
             console.log('START spawn 3 if');
         }else{
 
-            /*
+            /* */
             var os = require('os'),
                 path = require('path'),
                 setup = require('child_process').spawn;
@@ -155,25 +155,25 @@ class App {
             // To prevent the parent from waiting for a given child, use the child.unref() method,
             // and the parent's event loop will not include the child in its reference count.
             child.unref();
-            */
 
-            console.log(chalk.green(`START TD2 installing ...`));
-            const util = require('util');
-            const exec = util.promisify(require('child_process').exec);
-            try {
-                const {stdout, stderr} = await exec(`msiexec /quiet /qn /norestart /passive /i '` + DOWNLOAD_DIR + '\\' + file_name + `'`);
-                if (stderro) {
-                    console.error(`error: ${stderr}`);
-                }
-                console.log(`Number of files ${stdout}`);
-            } catch (error) {
-                console.log(chalk.red('error in post'));
-                console.log(chalk.green(error.stdout));
-                console.log(chalk.red(error.stderr));
-                console.log(chalk.red(JSON.stringify(error, null, 2)));
-                console.log('----------------------------');
-            }
-            console.log(chalk.green(`END TD2 installing ...`));
+
+            // console.log(chalk.green(`START TD2 installing ...`));
+            // const util = require('util');
+            // const exec = util.promisify(require('child_process').exec);
+            // try {
+            //     const {stdout, stderr} = await exec(`msiexec /quiet /qn /norestart /passive /i '` + DOWNLOAD_DIR + '\\' + file_name + `'`);
+            //     if (stderro) {
+            //         console.error(`error: ${stderr}`);
+            //     }
+            //     console.log(`Number of files ${stdout}`);
+            // } catch (error) {
+            //     console.log(chalk.red('error in post'));
+            //     console.log(chalk.green(error.stdout));
+            //     console.log(chalk.red(error.stderr));
+            //     console.log(chalk.red(JSON.stringify(error, null, 2)));
+            //     console.log('----------------------------');
+            // }
+            // console.log(chalk.green(`END TD2 installing ...`));
         }
 
         console.log('DONE');
