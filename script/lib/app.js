@@ -181,7 +181,7 @@ class App {
                     console.log('file_name not downloaded');
                     return;
                 }else{
-                    console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded, lets uninstallWindowsApp');
+                    console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded and installed');
                 }
                 break;
             case 'Darwin':
