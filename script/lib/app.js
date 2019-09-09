@@ -83,33 +83,8 @@ class App {
             }
         });
 
-        return
-        ls.stdout.on('data', (data) => {
-            Company.clearScr();
-            console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please wait .. that might take a while..'));
-            console.log(`${data}`);
-        });
-        ls.stderr.on('data', (data) => {
-            Company.clearScr();
-            console.log(chalk.yellow('----------install TD2 Silent App------------------ .. please wait .. that might take a while..'));
-            console.log(`${data}`);
-        });
-        ls.on('close', (code) => {
-            console.log(chalk.green(`TD2 installing finished.`));
-        });
-        return
-        // var DOWNLOAD_DIR = __dirname + '/downloads/';
-        // // compose the wget command
-        // var wget = 'curl  ' + DOWNLOAD_DIR + ' ' + file_url;
-        // // excute wget using child_process' exec function
-        // console.log(wget);
-        // var child = exec(wget, function(err, stdout, stderr) {
-        //   if (err) throw err;
-        //   else console.log('file downloaded to ' + DOWNLOAD_DIR);
-        // });
-        //
-        // return
-        let ls = spawn('curl', ['-O -J -L', file_url])
+
+        let ls = spawn('msiexec', ['/i  /quiet /qn /norestart', DOWNLOAD_DIR + file_name])
         ls.stdout.on('data', (data) => {
             Company.clearScr();
             console.log(chalk.yellow('----------downloading TD2 windows Silent App------------------ ..please wait .. that might take a while..'));
