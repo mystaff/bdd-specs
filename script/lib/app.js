@@ -10,7 +10,7 @@ const os = require('os');
 const mainUrl = require('url');
 const http = require('http');
 const {spawn} = require('child_process');
-const DOWNLOAD_DIR = __dirname;
+const DOWNLOAD_DIR = `${__dirname}\\downloads\\`;
 const path = require('path');
 const out = fs.openSync('./out.log', 'a');
 const err = fs.openSync('./out.log', 'a');
@@ -78,13 +78,13 @@ class App {
         // var DOWNLOAD_DIR = __dirname + '\\downloads\\';
         console.log("BEFORE IF");
         console.log((file_name));
-        console.log(fs.existsSync(file_name));
-        if (!fs.existsSync(file_name)) {
+        console.log(fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`));
+        if (!fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`)) {
             // create an instance of writable stream
-            var file = fs.createWriteStream(file_name);
+            var file = fs.createWriteStream(`${DOWNLOAD_DIR}\\${file_name}`);
             console.log("AFTER createWriteStream");
-            console.log((file_name));
-            console.log(fs.existsSync(file_name));
+            console.log((`${DOWNLOAD_DIR}\\${file_name}`));
+            console.log(fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`));
             // execute curl using child_process' spawn function
             // var curl = spawn('curl', [file_url]);
             console.log('START spawn');
@@ -98,7 +98,7 @@ class App {
             // add an 'end' event listener to close the writeable stream
             curl.stdout.on('end', function (data) {
                 file.end();
-                console.log(file_name + ' downloaded  ' );
+                console.log(`${DOWNLOAD_DIR}\\${file_name}` + ' downloaded  ' );
                 App.download(file_name);
             });
             console.log('START spawn 2 if');
@@ -110,7 +110,7 @@ class App {
             });
             console.log('START spawn 3 if');
         }else{
-            console.log('already ' + file_name + ' downloaded  ' );
+            console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded  ' );
             App.download(file_name);
         }
 
