@@ -10,6 +10,7 @@ const os = require('os');
 const mainUrl = require('url');
 const http = require('http');
 const {spawn} = require('child_process');
+const DOWNLOAD_DIR = __dirname;
 
 class App {
 
@@ -81,7 +82,6 @@ class App {
         const parsed    = queryString.parse(url_parts.search);
         const ar = parsed["response-content-disposition"].split('"');
         let file_name = ar[1];
-        var DOWNLOAD_DIR = __dirname;
         // var DOWNLOAD_DIR = __dirname + '\\downloads\\';
         console.log("BEFORE IF");
         console.log((file_name));
