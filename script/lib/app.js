@@ -93,20 +93,47 @@ class App {
                     console.log('Failed: ' + code);
                 }else{
                     console.log(chalk.yellow('----------downloading TD2 Silent App------------------ ..please wait .. that might take a while..'));
-                    let ls = spawn('msiexec', ['/i  /quiet /qn /norestart', file_name])
-                    ls.stdout.on('data', (data) => {
-                        Company.clearScr();
-                        console.log(chalk.yellow('----------downloading TD2 windows Silent App------------------ ..please wait .. that might take a while..'));
-                        console.log(`${data}`);
+                    /* */
+                    var os = require('os'),
+                        path = require('path'),
+                        setup = require('child_process').spawn;
+
+                    //1)uncomment following if you want to redirect standard output and error from the process to files
+
+                    var fs = require('fs');
+                    var out = fs.openSync('./out.log', 'a');
+                    var err = fs.openSync('./out.log', 'a');
+
+                    var fileName = file_name;
+
+                    //spawn command line (cmd as first param to spawn)
+                    var child = spawn('cmd', ["/S /C " + DOWNLOAD_DIR + '\\' + fileName], { // /S strips quotes and /C executes the runnable file (node way)
+                        detached: true, //see node docs to see what it does
+                        cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
+                        env: process.env
+                        //1) uncomment following if you want to "redirect" standard output and error from the process to files
+                        //stdio: ['ignore', out, err]
                     });
-                    ls.stderr.on('data', (data) => {
-                        Company.clearScr();
-                        console.log(chalk.yellow('----------downloading TD2 windows Silent App------------------ ..please wait .. that might take a while..'));
-                        console.log(`${data}`);
+
+                    //2) uncomment following if you want to "react" somehow to standard output and error from the process
+                    child.stdout.on('data', function(data) {
+                        console.log("stdout: " + data);
                     });
-                    ls.on('close', (code) => {
-                        console.log(chalk.green(`TD2 installing finished.`));
+
+                    child.stderr.on('data', function(data) {
+                        console.log("stdout: " + data);
                     });
+
+                    //here you can "react" when the spawned process ends
+                    child.on('close', function(code) {
+                        console.log("Child process exited with code " + code);
+                    });
+
+                    // THIS IS TAKEN FROM NODE JS DOCS
+                    // By default, the parent will wait for the detached child to exit.
+                    // To prevent the parent from waiting for a given child, use the child.unref() method,
+                    // and the parent's event loop will not include the child in its reference count.
+                    child.unref();
                 }
             });
             console.log('START spawn 3 if');
@@ -135,15 +162,13 @@ class App {
             });
 
             //2) uncomment following if you want to "react" somehow to standard output and error from the process
+            child.stdout.on('data', function(data) {
+              console.log("stdout: " + data);
+            });
 
-            //child.stdout.on('data', function(data) {
-             /// console.log("stdout: " + data);
-            //});
-
-            //child.stderr.on('data', function(data) {
-             // console.log("stdout: " + data);
-            //});
-
+            child.stderr.on('data', function(data) {
+             console.log("stdout: " + data);
+            });
 
             //here you can "react" when the spawned process ends
             child.on('close', function(code) {
