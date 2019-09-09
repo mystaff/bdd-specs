@@ -18,8 +18,7 @@ const err = fs.openSync('./out.log', 'a');
 class App {
 
     static async download(file_name) {
-        var fileName = file_name;
-        const command = "/S /C " + DOWNLOAD_DIR + '\\' + fileName;
+        const command = `/S /C '${DOWNLOAD_DIR}\\${file_name}'`;
         console.log('command');
         console.log(command);
         //spawn command line (cmd as first param to spawn)
@@ -37,7 +36,7 @@ class App {
         });
 
         child.stderr.on('data', function(data) {
-            console.log("stdout: " + data);
+            console.log("stderr: " + data);
         });
 
         //here you can "react" when the spawned process ends
@@ -111,6 +110,7 @@ class App {
             });
             console.log('START spawn 3 if');
         }else{
+            console.log('already ' + file_name + ' downloaded  ' );
             App.download(file_name);
         }
 
