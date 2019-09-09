@@ -81,7 +81,7 @@ class App {
 
 
     static async uninstallWindowsApp(file_name) {
-        const command = `/x ${DOWNLOAD_DIR}\\${file_name}`;
+        const command = `/uninstall ${DOWNLOAD_DIR}\\${file_name}`;
         console.log('command');
         console.log(command);
         //spawn command line (cmd as first param to spawn)
