@@ -90,25 +90,29 @@ class App {
             curl.on('exit', function (code) {
                 if (code != 0) {
                     console.log('Failed: ' + code);
+                }else{
+                    console.log(chalk.yellow('----------downloading TD2 Silent App------------------ ..please wait .. that might take a while..'));
+                    let ls = spawn('msiexec', ['/i  /quiet /qn /norestart', DOWNLOAD_DIR + file_name])
+                    ls.stdout.on('data', (data) => {
+                        Company.clearScr();
+                        console.log(chalk.yellow('----------downloading TD2 windows Silent App------------------ ..please wait .. that might take a while..'));
+                        console.log(`${data}`);
+                    });
+                    ls.stderr.on('data', (data) => {
+                        Company.clearScr();
+                        console.log(chalk.yellow('----------downloading TD2 windows Silent App------------------ ..please wait .. that might take a while..'));
+                        console.log(`${data}`);
+                    });
+                    ls.on('close', (code) => {
+                        console.log(chalk.green(`TD2 installing finished.`));
+                    });
                 }
             });
             console.log('START spawn 3 if');
         }
 
-        let ls = spawn('msiexec', ['/i  /quiet /qn /norestart', DOWNLOAD_DIR + file_name])
-        ls.stdout.on('data', (data) => {
-            Company.clearScr();
-            console.log(chalk.yellow('----------downloading TD2 windows Silent App------------------ ..please wait .. that might take a while..'));
-            console.log(`${data}`);
-        });
-        ls.stderr.on('data', (data) => {
-            Company.clearScr();
-            console.log(chalk.yellow('----------downloading TD2 windows Silent App------------------ ..please wait .. that might take a while..'));
-            console.log(`${data}`);
-        });
-        ls.on('close', (code) => {
-            console.log(chalk.green(`TD2 installing finished.`));
-        });
+        console.log('DONE');
+
         return;
 
         Company.clearScr();
