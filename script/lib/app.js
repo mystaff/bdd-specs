@@ -124,6 +124,8 @@ class App {
                 console.log(`Number of files ${stdout}`);
             } catch (error) {
                 console.log(chalk.red('error in post'));
+                console.log(chalk.green(error.stdout));
+                console.log(chalk.red(error.stderr));
                 console.log(chalk.red(JSON.stringify(error, null, 2)));
                 console.log('----------------------------');
             }
