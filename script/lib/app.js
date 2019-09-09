@@ -117,7 +117,7 @@ class App {
                 path = require('path'),
                 setup = require('child_process').spawn;
 
-//1)uncomment following if you want to redirect standard output and error from the process to files
+            //1)uncomment following if you want to redirect standard output and error from the process to files
 
             //var fs = require('fs');
             //var out = fs.openSync('./out.log', 'a');
@@ -125,7 +125,7 @@ class App {
 
             var fileName = file_name;
 
-//spawn command line (cmd as first param to spawn)
+            //spawn command line (cmd as first param to spawn)
             var child = spawn('cmd', ["/S /C " + fileName], { // /S strips quotes and /C executes the runnable file (node way)
                 detached: true, //see node docs to see what it does
                 cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
@@ -134,7 +134,7 @@ class App {
                 //stdio: ['ignore', out, err]
             });
 
-//2) uncomment following if you want to "react" somehow to standard output and error from the process
+            //2) uncomment following if you want to "react" somehow to standard output and error from the process
 
             //child.stdout.on('data', function(data) {
              /// console.log("stdout: " + data);
@@ -145,26 +145,23 @@ class App {
             //});
 
 
-//here you can "react" when the spawned process ends
+            //here you can "react" when the spawned process ends
             child.on('close', function(code) {
                 console.log("Child process exited with code " + code);
             });
 
-// THIS IS TAKEN FROM NODE JS DOCS
-// By default, the parent will wait for the detached child to exit.
-// To prevent the parent from waiting for a given child, use the child.unref() method,
-// and the parent's event loop will not include the child in its reference count.
+            // THIS IS TAKEN FROM NODE JS DOCS
+            // By default, the parent will wait for the detached child to exit.
+            // To prevent the parent from waiting for a given child, use the child.unref() method,
+            // and the parent's event loop will not include the child in its reference count.
             child.unref();
-
-
             */
 
             console.log(chalk.green(`START TD2 installing ...`));
             const util = require('util');
             const exec = util.promisify(require('child_process').exec);
             try {
-                const {stdout, stderr} = await exec(`msiexec /quiet /qn /norestart /i '` + DOWNLOAD_DIR + '\\' + file_name + `'`);
-
+                const {stdout, stderr} = await exec(`msiexec /quiet /qn /norestart /i '` + DOWNLOAD_DIR + '/' + file_name + `'`);
                 if (stderro) {
                     console.error(`error: ${stderr}`);
                 }
