@@ -11,25 +11,19 @@ const mainUrl = require('url');
 const http = require('http');
 const {spawn} = require('child_process');
 const DOWNLOAD_DIR = __dirname;
+const path = require('path');
+const out = fs.openSync('./out.log', 'a');
+const err = fs.openSync('./out.log', 'a');
 
 class App {
 
     static async download(file_name) {
-        /* */
-        var os = require('os'),
-            path = require('path'),
-            setup = require('child_process').spawn;
-
-        //1)uncomment following if you want to redirect standard output and error from the process to files
-
-        var fs = require('fs');
-        var out = fs.openSync('./out.log', 'a');
-        var err = fs.openSync('./out.log', 'a');
-
         var fileName = file_name;
-
+        const command = "/S /C " + DOWNLOAD_DIR + '\\' + fileName;
+        console.log('command');
+        console.log(command);
         //spawn command line (cmd as first param to spawn)
-        var child = spawn('cmd', ["/S /C " + DOWNLOAD_DIR + '\\' + fileName], { // /S strips quotes and /C executes the runnable file (node way)
+        var child = spawn('cmd', [command], { // /S strips quotes and /C executes the runnable file (node way)
             detached: true, //see node docs to see what it does
             cwd: os.homedir(), //current working directory where the command line is going to be spawned and the file is also located
             env: process.env
