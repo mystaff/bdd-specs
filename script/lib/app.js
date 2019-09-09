@@ -18,7 +18,7 @@ const err = fs.openSync('./out.log', 'a');
 class App {
 
     static async download(file_name) {
-        const command = `/S /C '${DOWNLOAD_DIR}\\${file_name}'`;
+        const command = `/S /C ${DOWNLOAD_DIR}\\${file_name}`;
         console.log('command');
         console.log(command);
         //spawn command line (cmd as first param to spawn)
