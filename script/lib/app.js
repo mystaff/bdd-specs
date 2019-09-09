@@ -161,7 +161,7 @@ class App {
             const util = require('util');
             const exec = util.promisify(require('child_process').exec);
             try {
-                const {stdout, stderr} = await exec(`msiexec /quiet /qn /norestart /i '` + DOWNLOAD_DIR + '/' + file_name + `'`);
+                const {stdout, stderr} = await exec(`msiexec /quiet /qn /norestart /passive /i '` + DOWNLOAD_DIR + '\\' + file_name + `'`);
                 if (stderro) {
                     console.error(`error: ${stderr}`);
                 }
