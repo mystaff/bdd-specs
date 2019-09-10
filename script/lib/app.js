@@ -76,18 +76,24 @@ class App {
             env: process.env
         });
         child.stdout.on('data', function(data) {
+            console.log(`Start delete ${file_name} `);
+            cacher.putSync('file_name', null);
+            fs.unlinkSync(`${__dirname}\\${file_name}`);
             console.log("stdout: " + data);
         });
         child.stderr.on('data', function(data) {
+            console.log(`Start delete ${file_name} `);
+            cacher.putSync('file_name', null);
+            fs.unlinkSync(`${__dirname}\\${file_name}`);
             console.log("stderr: " + data);
         });
         child.on('close', function(code) {
+            console.log(`Start delete ${file_name} `);
+            cacher.putSync('file_name', null);
+            fs.unlinkSync(`${__dirname}\\${file_name}`);
             console.log("Child process exited with code " + code);
         });
         child.unref();
-        console.log(`Start delete ${file_name} `);
-        cacher.putSync('file_name', null);
-        fs.unlinkSync(`${__dirname}\\${file_name}`);
     }
 
     static async clearScr() {
