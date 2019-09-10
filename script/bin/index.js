@@ -2,6 +2,7 @@
 const program = require('commander');
 const company = require('../lib/company');
 const app = require('../lib/app.js');
+const cacher = cache();
 /** **************************************** */
 
 // $ td init
@@ -24,6 +25,9 @@ program
   .action(() => {
     app.uninstallApp();
     company.deleteCachedCompany();
+    cacher.unlink(function(err) {
+        console.log('the entire folder removed from cache');
+    })
   });
 
 // $ td status

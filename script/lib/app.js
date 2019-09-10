@@ -67,8 +67,9 @@ class App {
 
 
     static async uninstallWindowsApp(file_name) {
-
-        cacher.putSync('file_name', null);
+        cacher.delete('file_name', function(err) {
+            console.log('file_name removed from cache');
+        });
         const command = [`/quiet`, `/qn`, `/norestart`, `/uninstall` , `${__dirname}\\${file_name}`];
         console.log('command');
         console.log(command);

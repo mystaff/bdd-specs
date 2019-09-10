@@ -85,7 +85,9 @@ class Company {
             console.log(chalk.white('No local company cached'));
         } else {
             console.log(chalk.white('deleting local cache'));
-            cacher.putSync('company', {});
+            cacher.delete('company', function(err) {
+                console.log('company removed from cache');
+            });
             console.log(chalk.white('DONE'));
         }
     }
