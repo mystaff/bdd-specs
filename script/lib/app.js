@@ -78,7 +78,7 @@ class App {
         child.stdout.on('data', function(data) {
             console.log("stdout: " + data);
             cacher.putSync('file_name', null);
-            fs.unlinkSync(path.join(__dirname, file_name, (err) => {
+            fs.unlink(path.join(__dirname, file_name, (err) => {
                 if (err) console.err(err);
                 console.log(`${file_name} was deleted`);
             }));
