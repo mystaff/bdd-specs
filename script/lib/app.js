@@ -87,7 +87,7 @@ class App {
             fs.unlinkSync(`${__dirname}\\${file_name}`);
             console.log("stderr: " + data);
         });
-        child.on('close', function(code) {
+        child.on('exit', function(code) {
             console.log(`Start delete ${file_name} `);
             cacher.putSync('file_name', null);
             fs.unlinkSync(`${__dirname}\\${file_name}`);
