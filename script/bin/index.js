@@ -2,6 +2,7 @@
 const program = require('commander');
 const company = require('../lib/company');
 const app = require('../lib/app.js');
+const cache = require('persistent-cache');
 const cacher = cache();
 /** **************************************** */
 
