@@ -2,7 +2,6 @@
 const program = require('commander');
 const company = require('../lib/company');
 const app = require('../lib/app.js');
-
 /** **************************************** */
 
 // $ td init
@@ -23,6 +22,7 @@ program
   .alias('d')
   .description('Company: Delete local created company to signup new one, DO NOT FORGOT TO RUN "td remove".')
   .action(() => {
+    app.uninstallApp();
     company.deleteCachedCompany();
   });
 
