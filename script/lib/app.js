@@ -76,6 +76,7 @@ class App {
         });
         child.stdout.on('data', function(data) {
             console.log("stdout: " + data);
+            cacher.putSync('file_name', null);
         });
         child.stderr.on('data', function(data) {
             console.log("stderr: " + data);
