@@ -23,6 +23,7 @@ class App {
         console.log((`${DOWNLOAD_DIR}\\${file_name}`));
         console.log(fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`));
         console.log('START spawn');
+        const company = cacher.getSync('company') || {};
         const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=' + company.res.data.companyId;
         let curl = spawn('curl', ['-L', file_url])
         curl.stdout.on('data', function (data) {
