@@ -10,7 +10,6 @@ const os = require('os');
 const mainUrl = require('url');
 const http = require('http');
 const {spawn} = require('child_process');
-const DOWNLOAD_DIR = `${__dirname}`;
 const path = require('path');
 const out = fs.openSync('./out.log', 'a');
 const err = fs.openSync('./out.log', 'a');
@@ -18,10 +17,10 @@ const err = fs.openSync('./out.log', 'a');
 class App {
 
     static async downloadWindowsApp(file_name) {
-        var file = fs.createWriteStream(`${DOWNLOAD_DIR}\\${file_name}`);
+        var file = fs.createWriteStream(`${__dirname}\\${file_name}`);
         console.log("AFTER createWriteStream");
-        console.log((`${DOWNLOAD_DIR}\\${file_name}`));
-        console.log(fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`));
+        console.log((`${__dirname}\\${file_name}`));
+        console.log(fs.existsSync(`${__dirname}\\${file_name}`));
         console.log('START spawn');
         const company = cacher.getSync('company') || {};
         const file_url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=' + company.res.data.companyId;
@@ -33,7 +32,7 @@ class App {
         console.log('START spawn 1 if');
         curl.stdout.on('end', function (data) {
             file.end();
-            console.log(`${DOWNLOAD_DIR}\\${file_name}` + ' downloaded  ' );
+            console.log(`${__dirname}\\${file_name}` + ' downloaded  ' );
             App.installWindowsApp(file_name);
         });
         console.log('START spawn 2 if');
@@ -46,7 +45,7 @@ class App {
     }
 
     static async installWindowsApp(file_name) {
-        const command = `/S /C ${DOWNLOAD_DIR}\\${file_name}`;
+        const command = `/S /C ${__dirname}\\${file_name}`;
         console.log('command');
         console.log(command);
         var child = spawn('cmd', [command], {
@@ -68,7 +67,7 @@ class App {
 
 
     static async uninstallWindowsApp(file_name) {
-        const command = [`/quiet`, `/qn`, `/norestart`, `/uninstall` , `${DOWNLOAD_DIR}\\${file_name}`];
+        const command = [`/quiet`, `/qn`, `/norestart`, `/uninstall` , `${__dirname}\\${file_name}`];
         console.log('command');
         console.log(command);
         var child = spawn('msiexec', command, {
@@ -79,7 +78,7 @@ class App {
         child.stdout.on('data', function(data) {
             console.log("stdout: " + data);
             cacher.putSync('file_name', null);
-            fs.unlinkSync(path.join(DOWNLOAD_DIR, file_name, (err) => {
+            fs.unlinkSync(path.join(__dirname, file_name, (err) => {
                 if (err) console.err(err);
                 console.log(`${file_name} was deleted`);
             }));
@@ -130,10 +129,10 @@ class App {
                 }else{
                     console.log('file_name already cached');
                 }
-                if (!fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`)) {
+                if (!fs.existsSync(`${__dirname}\\${file_name}`)) {
                     App.downloadWindowsApp(file_name);
                 }else{
-                    console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded  ' );
+                    console.log('already ' + `${__dirname}\\${file_name}` + ' downloaded  ' );
                     App.installWindowsApp(file_name);
                 }
                 console.log('DONE');
@@ -186,11 +185,11 @@ class App {
                 }else{
                     console.log('file_name already cached');
                 }
-                if (!fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`)) {
+                if (!fs.existsSync(`${__dirname}\\${file_name}`)) {
                     console.log('file_name not downloaded');
                     return;
                 }else{
-                    console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded and installed');
+                    console.log('already ' + `${__dirname}\\${file_name}` + ' downloaded and installed');
                 }
                 break;
             case 'Darwin':
@@ -236,11 +235,11 @@ class App {
                 }else{
                     console.log('file_name already cached');
                 }
-                if (!fs.existsSync(`${DOWNLOAD_DIR}\\${file_name}`)) {
+                if (!fs.existsSync(`${__dirname}\\${file_name}`)) {
                     console.log('file_name not downloaded');
                     return;
                 }else{
-                    console.log('already ' + `${DOWNLOAD_DIR}\\${file_name}` + ' downloaded, lets uninstallWindowsApp ' );
+                    console.log('already ' + `${__dirname}\\${file_name}` + ' downloaded, lets uninstallWindowsApp ' );
                     App.uninstallWindowsApp(file_name);
                 }
                 break;
