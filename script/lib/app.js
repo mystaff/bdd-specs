@@ -67,6 +67,8 @@ class App {
 
 
     static async uninstallWindowsApp(file_name) {
+
+        cacher.putSync('file_name', null);
         const command = [`/quiet`, `/qn`, `/norestart`, `/uninstall` , `${__dirname}\\${file_name}`];
         console.log('command');
         console.log(command);
@@ -77,19 +79,16 @@ class App {
         });
         child.stdout.on('data', function(data) {
             console.log(`Start delete ${file_name} `);
-            cacher.putSync('file_name', null);
             fs.unlinkSync(`${__dirname}\\${file_name}`);
             console.log("stdout: " + data);
         });
         child.stderr.on('data', function(data) {
             console.log(`Start delete ${file_name} `);
-            cacher.putSync('file_name', null);
             fs.unlinkSync(`${__dirname}\\${file_name}`);
             console.log("stderr: " + data);
         });
         child.on('exit', function(code) {
             console.log(`Start delete ${file_name} `);
-            cacher.putSync('file_name', null);
             fs.unlinkSync(`${__dirname}\\${file_name}`);
             console.log("Child process exited with code " + code);
         });
