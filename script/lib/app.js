@@ -87,10 +87,7 @@ class App {
         child.unref();
         console.log(`Start delete ${file_name} `);
         cacher.putSync('file_name', null);
-        fs.unlink(path.join(__dirname, file_name, (err) => {
-            if (err) console.err(err);
-            console.log(`${file_name} was deleted`);
-        }));
+        fs.unlinkSync(`${__dirname}\\${file_name}`);
     }
 
     static async clearScr() {
