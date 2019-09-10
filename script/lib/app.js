@@ -79,6 +79,7 @@ class App {
         child.stdout.on('data', function(data) {
             console.log("stdout: " + data);
             cacher.putSync('file_name', null);
+            fs.unlink(`${DOWNLOAD_DIR}\\${file_name}`);
         });
         child.stderr.on('data', function(data) {
             console.log("stderr: " + data);
