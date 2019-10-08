@@ -45,7 +45,8 @@ class App {
     }
 
     static async installWindowsApp(file_name) {
-        const command = `/S /C ${__dirname}\\${file_name}`;
+        console.log('msiexecmsiexecmsiexecmsiexecmsiexecmsiexec command');
+        const command = ` msiexec /passive /i ${__dirname}\\${file_name}`;
         console.log('command');
         console.log(command);
         var child = spawn('cmd', [command], {
@@ -70,7 +71,7 @@ class App {
         cacher.delete('file_name', function(err) {
             console.log('file_name removed from cache');
         });
-        const command = [`/quiet`, `/qn`, `/norestart`, `/uninstall` , `${__dirname}\\${file_name}`];
+        const command = [`/quiet`, `/qn`, `/norestart`, `/x` , `${__dirname}\\${file_name}`];
         console.log('command');
         console.log(command);
         var child = spawn('msiexec', command, {
@@ -79,19 +80,25 @@ class App {
             env: process.env
         });
         child.stdout.on('data', function(data) {
-            console.log(`Start delete ${file_name} `);
-            fs.unlinkSync(`${__dirname}\\${file_name}`);
-            console.log("stdout: " + data);
+            if (fs.existsSync(`${__dirname}\\${file_name}`)) {
+                console.log(`Start delete ${file_name} `);
+                fs.unlinkSync(`${__dirname}\\${file_name}`);
+                console.log("stdout: " + data);
+            }
         });
         child.stderr.on('data', function(data) {
-            console.log(`Start delete ${file_name} `);
-            fs.unlinkSync(`${__dirname}\\${file_name}`);
-            console.log("stderr: " + data);
+            if (fs.existsSync(`${__dirname}\\${file_name}`)) {
+                console.log(`Start delete ${file_name} `);
+                fs.unlinkSync(`${__dirname}\\${file_name}`);
+                console.log("stderr: " + data);
+            }
         });
         child.on('exit', function(code) {
-            console.log(`Start delete ${file_name} `);
-            fs.unlinkSync(`${__dirname}\\${file_name}`);
-            console.log("Child process exited with code " + code);
+            if (fs.existsSync(`${__dirname}\\${file_name}`)) {
+                console.log(`Start delete ${file_name} `);
+                fs.unlinkSync(`${__dirname}\\${file_name}`);
+                console.log("Child process exited with code " + code);
+            }
         });
         child.unref();
     }
