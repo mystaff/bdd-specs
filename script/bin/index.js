@@ -44,9 +44,20 @@ program
 // $ td install
 // $ td in
 program
+    .command('download')
+    .alias('dd')
+    .description('App: Download TD2 silent application.')
+    .action(() => {
+        app.downloadTDSilentApp();
+    });
+
+
+// $ td install
+// $ td in
+program
   .command('install')
   .alias('in')
-  .description('App: Download and install TD2 silent application.')
+  .description('App: Install TD2 silent application.')
   .action(() => {
       app.installTDSilentApp();
   });

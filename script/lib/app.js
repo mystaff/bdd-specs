@@ -119,8 +119,49 @@ class App {
             console.log(chalk.red('No local company cached'));
             return;
         }
-        console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please be wait .. that might take a while..'));
         switch (os.type()) {
+            case 'Linux':
+                console.log(chalk.white('TD2 App on Linux is not implemented yet.'));
+                break;
+            case 'Windows_NT':
+                let file_name = cacher.getSync('file_name') || null;
+                if (file_name) {
+                    console.log('already ' + `${__dirname}\\${file_name}` + ' downloaded  ' );
+                    App.installWindowsApp(file_name);
+                }else{
+                    console.log('file_name is not cached');
+                    return;
+                }
+                if (fs.existsSync(`${__dirname}\\${file_name}`)) {
+                    console.log('already ' + `${__dirname}\\${file_name}` + ' downloaded  ' );
+                    App.installWindowsApp(file_name);
+                }else{
+                    console.log('file_name in not downloaded');
+                    return;
+                }
+                console.log('DONE');
+                // const url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=XW_DuwsxDAAh9jTs';
+                // 'msiexec  /quiet /qn /norestart /i  sfproc-2.1.0.40-5d6fc8c5621f9e0019f25e23.msi';
+                // 'msiexec.exe /i sfproc-2.1.0.40-5d6fc8c5621f9e0019f25e23.msi /QN /L*V "msilog.log"';
+                break;
+            case 'Darwin':
+                console.log(chalk.white('TD2 App on Mac is not implemented yet.'));
+                break;
+            default:
+                break;
+        }
+    }
+    static async downloadTDSilentApp() {
+        App.clearScr();
+        const company = cacher.getSync('company') || {};
+        if (Object.keys(company).length === 0) {
+            console.log(chalk.red('No local company cached'));
+            return;
+        }
+        let osType = os.type();
+        console.log(chalk.yellow('----------install TD2 Silent App------------------ ..please be wait .. that might take a while..'));
+        osType = 'Windows_NT';
+        switch (osType) {
             case 'Linux':
                 console.log(chalk.white('TD2 App on Linux is not implemented yet.'));
                 break;
@@ -143,8 +184,8 @@ class App {
                 if (!fs.existsSync(`${__dirname}\\${file_name}`)) {
                     App.downloadWindowsApp(file_name);
                 }else{
-                    console.log('already ' + `${__dirname}\\${file_name}` + ' downloaded  ' );
-                    App.installWindowsApp(file_name);
+                    console.log('DONE ' + `${__dirname}\\${file_name}` + ' downloaded  ' );
+                    // App.installWindowsApp(file_name);
                 }
                 console.log('DONE');
                 // const url = 'https://kwc5w69wa3.execute-api.us-east-1.amazonaws.com/production/msi-filename-redirect?hostname=2.timedoctor.com&companyId=XW_DuwsxDAAh9jTs';
