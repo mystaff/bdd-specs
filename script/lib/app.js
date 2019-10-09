@@ -45,7 +45,7 @@ class App {
     }
 
     static async installWindowsApp(file_name) {
-        const command = `/S /C ${__dirname}\\${file_name}`;
+        const command = `/S /C ${__dirname}\\${file_name} /Q`;
         console.log('command');
         console.log(command);
         var child = spawn('cmd', [command], {
