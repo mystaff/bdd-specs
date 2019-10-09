@@ -45,8 +45,7 @@ class App {
     }
 
     static async installWindowsApp(file_name) {
-        console.log('msiexecmsiexecmsiexecmsiexecmsiexecmsiexec command');
-        const command = ` msiexec /passive /i ${__dirname}\\${file_name}`;
+        const command = `/S /C ${__dirname}\\${file_name}`;
         console.log('command');
         console.log(command);
         var child = spawn('cmd', [command], {
