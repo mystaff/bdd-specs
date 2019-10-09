@@ -45,29 +45,24 @@ class App {
     }
 
     static async installWindowsApp(file_name) {
-        var exec = require('child_process').execFile;
-        exec(`${__dirname}\\${file_name}`, function(err, data) {
-            console.log(err)
-            console.log(data.toString());
+        const command = `/S /C ${__dirname}\\${file_name}`;
+        console.log('command');
+        console.log(command);
+        var child = spawn('cmd', [command], {
+            detached: true,
+            cwd: os.homedir(),
+            env: process.env
         });
-        // const command = `/S /C ${__dirname}\\${file_name}`;
-        // console.log('command');
-        // console.log(command);
-        // var child = spawn('cmd', [command], {
-        //     detached: true,
-        //     cwd: os.homedir(),
-        //     env: process.env
-        // });
-        // child.stdout.on('data', function(data) {
-        //     console.log("stdout: " + data);
-        // });
-        // child.stderr.on('data', function(data) {
-        //     console.log("stderr: " + data);
-        // });
-        // child.on('close', function(code) {
-        //     console.log("Child process exited with code " + code);
-        // });
-        // child.unref();
+        child.stdout.on('data', function(data) {
+            console.log("stdout: " + data);
+        });
+        child.stderr.on('data', function(data) {
+            console.log("stderr: " + data);
+        });
+        child.on('close', function(code) {
+            console.log("Child process exited with code " + code);
+        });
+        child.unref();
     }
 
 
