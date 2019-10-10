@@ -1,0 +1,16 @@
+.DS_Store
+.idea
+.idea/*
+ script/node_modules/*
+ script/node_modules
+ script/cache/
+ script/cache/*
+node_modules/*
+node_modules
+script/cache
+script/cache/cache/*
+script/cache/*
+script/bin/cache/*
+script/bin/cache/cache/*
+script/lib/downloads/
+script/out.log
